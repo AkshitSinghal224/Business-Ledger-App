@@ -2,7 +2,7 @@ import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import React, { useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import BottomSheet from './BottomSheet';
 import { Link } from 'expo-router';
 
@@ -20,7 +20,7 @@ const CustomFooter = () => {
       </TouchableOpacity>
       <TouchableOpacity>
         <Link href={'/Logs'}>
-          <Ionicons style={styles.bookIcon} name="book-outline" size={25} color={Colors.primary} />
+          <Ionicons style={styles.bookIcon} name="book" size={30} color={Colors.primary} />
         </Link>
       </TouchableOpacity>
     </View>
@@ -35,6 +35,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 16,
     height: 100,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1, 
   },
   cartIcon: {
     marginBottom: 3,

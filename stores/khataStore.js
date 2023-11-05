@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 const useCustomersStore = create((set) => ({
   Customers: [],
@@ -21,9 +21,15 @@ const useCustomersStore = create((set) => ({
       }
     });
   },
+  setSeletedTempItemsToNull: () => set({SeletedTempItems: []}),
 
   SeletedCustomer: [],
   setSeletedCustomer: (newCustomer) => set({ SeletedCustomer: newCustomer }),
+
+
+  allLogs: [],
+  setAllLogs: (newLogs) => set({ allLogs: newLogs}),
+
 }));
 
 

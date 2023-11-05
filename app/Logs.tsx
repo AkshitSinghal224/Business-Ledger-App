@@ -4,10 +4,10 @@ import { deleteLog, getLogs } from '@/db/database';
 import Colors from '@/constants/Colors';
 import Swipeout from 'react-native-swipeout';
 import { Ionicons } from '@expo/vector-icons';
+import useCustomersStore from '@/stores/khataStore';
 
 const Logs = () => {
-  const [allLogs, setAllLogs] = useState([]);
-
+  const { allLogs, setAllLogs } = useCustomersStore();
   async function getAllLogs() {
     try {
       const data = await getLogs();
@@ -61,7 +61,7 @@ const Logs = () => {
                     <Text style={styles.indexText2}>Quantity</Text>
                     <Text style={styles.indexText3}>Price</Text>
                   </View>
-                  {parsedLogData.map((row: any,idx: any) => {
+                  {parsedLogData.map((row: any, idx: any) => {
                     return (
                       <>
                         <View key={idx} style={styles.logRow}>

@@ -97,6 +97,10 @@ const styles = StyleSheet.create({
   searchContainer: {
     height: 50,
     backgroundColor: '#fff',
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
   },
   serachSection: {
     flexDirection: 'row',

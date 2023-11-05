@@ -28,7 +28,12 @@ export default function RootLayoutNav() {
         <Stack.Screen
           name="(modal)/Filter"
           options={{
+            title: 'Filter',
             presentation: 'modal',
+            headerTitleStyle: {
+              color: Colors.primary,
+              fontSize: 20,
+            },
           }}
         />
         <Stack.Screen
@@ -43,13 +48,6 @@ export default function RootLayoutNav() {
               color: Colors.primary,
               fontSize: 20,
             },
-            headerRight: () => (
-              <TouchableOpacity>
-                <Link href={'/(modal)/Filter'}>
-                  <Ionicons name="options-outline" size={25} color={Colors.primary} />
-                </Link>
-              </TouchableOpacity>
-            ),
             headerTintColor: Colors.primary,
           }}
         />
@@ -57,7 +55,6 @@ export default function RootLayoutNav() {
           name="Logs"
           options={{
             title: 'Log Book',
-            headerShadowVisible: false,
             headerStyle: {
               backgroundColor: '#fff',
             },

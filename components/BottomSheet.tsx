@@ -15,7 +15,7 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
   const [secondInput, setSecondInput] = useState<String>('');
 
   const sender = props.sender;
-  const snapPoints = useMemo(() => ['40%'], []);
+  const snapPoints = useMemo(() => ['80%'], []);
   const renderBackdrop = useCallback(
     (props: any) => <BottomSheetBackdrop appearsOnIndex={1} disappearsOnIndex={-1} {...props} />,
     []
@@ -27,9 +27,9 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
     if (sender === 'footer') {
       try {
         await addItem(`${firstInput} ${secondInput}`);
-        console.log('added item successfully');
+       
       } catch (err) {
-        console.log('error while adding customer', err);
+        console.error('error while adding customer', err);
       }
     } else {
       try {
@@ -37,9 +37,8 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
         const res = await getAllCustomer();
         res.sort((a: any, b: any) => a.name.localeCompare(b.name));
         setCustomers(res);
-        console.log('added customer successfully');
       } catch (err) {
-        console.log('error while adding customer', err);
+        console.error('error while adding customer', err);
       }
     }
     dismiss();

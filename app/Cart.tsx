@@ -48,13 +48,14 @@ const FilterSearchBar = () => {
 };
 
 const Footer = () => {
-  const { allItems, SeletedTempItems, SeletedCustomer } = useCustomersStore();
+  const {setSeletedTempItemsToNull, SeletedTempItems, SeletedCustomer } = useCustomersStore();
 
   const navigation = useNavigation();
 
   async function handleConfirmButton() {
     try {
       const res = await createLog(SeletedCustomer, SeletedTempItems);
+      setSeletedTempItemsToNull();
       console.log('log sucess');
     } catch (error) {
       console.error('Error when loging data', error);
@@ -94,22 +95,19 @@ const Cart = () => {
   return (
     <>
       <FilterSearchBar />
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.page}>
-        <View style={styles.mainContiner}>
-          {allItems?.map((item: any, idx: any) => {
-            return <Item key={idx} fetchItemsData={fetchItemsData} item={item} />;
-          })}
-        </View>
-      </ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.mainContiner}>
+            {allItems?.map((item: any, idx: any) => {
+              return <Item key={idx} fetchItemsData={fetchItemsData} item={item} />;
+            })}
+          </View>
+        </ScrollView>
       <Footer />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  page: {
-    backgroundColor: '#fff',
-  },
   headerMargin: {
     paddingTop: 20,
     backgroundColor: '#fff',
