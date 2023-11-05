@@ -8,24 +8,53 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import BottomSheet from './BottomSheet';
+import useCustomersStore from '@/stores/khataStore';
+import { getAllCustomer } from '@/db/database';
 
-const SeachBar = () => (
-  <View style={styles.searchContainer}>
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.serachSection}>
-        <View style={styles.serachField}>
-          <Ionicons style={styles.serachIcon} name="ios-search" size={20} color={Colors.medium} />
-          <TextInput style={styles.input} placeholder="Search...." />
+const SeachBar = () => {
+  const { Customers, setCustomers } = useCustomersStore();
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  useEffect(() => {
+    filterCustomers();
+  }, [searchQuery]);
+
+  const filterCustomers = async () => {
+    if (!searchQuery) {
+      const res = await getAllCustomer();
+      res.sort((a: any, b: any) => a.name.localeCompare(b.name));
+      setCustomers(res);
+    } else {
+      const filteredCustomers = Customers.filter((customer: any) =>
+        customer.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setCustomers(filteredCustomers);
+    }
+  };
+
+  return (
+    <View style={styles.searchContainer}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.serachSection}>
+          <View style={styles.serachField}>
+            <Ionicons style={styles.serachIcon} name="ios-search" size={20} color={Colors.medium} />
+            <TextInput
+              value={searchQuery}
+              onChangeText={(text) => setSearchQuery(text)}
+              style={styles.input}
+              placeholder="Search...."
+            />
+          </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
-  </View>
-);
+      </TouchableWithoutFeedback>
+    </View>
+  );
+};
 
 const CustomHeader = () => {
   const BottomSheetRef = useRef<BottomSheetModal>(null);
@@ -34,10 +63,9 @@ const CustomHeader = () => {
   }
   return (
     <SafeAreaView style={styles.safeArea}>
-      <BottomSheet sender={"header"} ref={BottomSheetRef} />
+      <BottomSheet sender={'header'} ref={BottomSheetRef} />
       <View style={styles.titleContainer}>
         <Text style={styles.headerText}>Khata App</Text>
-
         <TouchableOpacity onPress={openModal}>
           <Ionicons style={styles.addButton} name="person-add-outline" size={20} color={Colors.primary} />
         </TouchableOpacity>

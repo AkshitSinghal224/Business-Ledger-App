@@ -1,58 +1,74 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import Colors from '@/constants/Colors';
-import { useNavigation } from '@react-navigation/native';
-import { Link, Redirect } from 'expo-router';
+import { Link } from 'expo-router';
+import { deleteCustomer, getAllCustomer, getLogs } from '@/db/database';
+import useCustomersStore from '../stores/khataStore';
+import Swipeout from 'react-native-swipeout';
+import { Ionicons } from '@expo/vector-icons';
 
-interface CustomerListProps {
-  setSelectedCustomer: (name: string) => void;
-}
+const CustomerList = () => {
+  const { Customers, setCustomers } = useCustomersStore();
+  const { setSeletedCustomer } = useCustomersStore();
 
-const CustomerList: React.FC<CustomerListProps> = ({ setSelectedCustomer }) => {
-  const names = [
-    'Emma Taylor',
-    'Isaac Smith',
-    'Hannah Wilson',
-    'Frank Smith',
-    'Charlie Lopez',
-    'Bob Harris',
-    'Alice Davis',
-    'Jessica Davis',
-    'David Lopez',
-    'Grace Smith',
-    'Frank Smith',
-    'Charlie Johnson',
-    'David Harris',
-    'Jessica Taylor',
-    'Hannah Lee',
-    'Grace Lopez',
-    'Bob Davis',
-    'Isaac Lee',
-    'David Harris',
-    'Alice Smith',
-  ];
+  async function fetchCustomerData() {
+    try {
+      const res = await getAllCustomer();
+      res.sort((a: any, b: any) => a.name.localeCompare(b.name));
+      setCustomers(res);
+    } catch (error) {
+      console.error('Error fetching customer data:', error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCustomerData();
+  }, []);
 
   const handleNameClick = (name: string) => {
-    setSelectedCustomer(name);
+    setSeletedCustomer(name);
+  };
+
+  const handleDeleteCustomer = (id: number) => {
+    deleteCustomer(id);
+    fetchCustomerData();
   };
 
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => getLogs()}>
         <Text style={styles.title}>Customers</Text>
-        {names.map((name, idx) => {
-          return (
-            <Link href={'Cart'} asChild>
-              <TouchableOpacity key={idx} onPress={() => handleNameClick(name)}>
+      </TouchableOpacity>
+      {Customers.map((customer: any) => {
+        return (
+          <Swipeout
+            key={customer?.id}
+            style={{ backgroundColor: '#fff' }}
+            right={[
+              {
+                component: (
+                  <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons style={styles.deleteIcon} name="trash-outline" size={23} color={'white'} />
+                  </View>
+                ),
+                backgroundColor: Colors.medium,
+                onPress: () => handleDeleteCustomer(customer.id),
+              },
+            ]}
+          >
+            <Link href={'/Cart'} asChild>
+              <TouchableOpacity onPress={() => handleNameClick(customer)}>
                 <View style={styles.customerItem}>
-                  <Text style={styles.customersName}>{name}</Text>
+                  <Text style={styles.customersName}>{customer?.name}</Text>
                   <View style={styles.bottomBorder} />
                 </View>
               </TouchableOpacity>
             </Link>
-          );
-        })}
-      </View>
+          </Swipeout>
+        );
+      })}
+    </View>
   );
 };
 
@@ -77,6 +93,9 @@ const styles = StyleSheet.create({
   bottomBorder: {
     height: 1,
     backgroundColor: Colors.primary,
+  },
+  deleteIcon: {
+    marginTop: 17,
   },
 });
 

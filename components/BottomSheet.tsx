@@ -1,7 +1,9 @@
-import { View, Text, Button, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
-import React, { forwardRef, useCallback, useMemo } from 'react';
-import { BottomSheetBackdrop, BottomSheetModal, useBottomSheet, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import React, { forwardRef, useCallback, useMemo, useState } from 'react';
+import { BottomSheetBackdrop, BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import Colors from '@/constants/Colors';
+import { addCustomer, addItem, getAllCustomer } from '@/db/database';
+import useCustomersStore from '@/stores/khataStore';
 
 export type Ref = BottomSheetModal;
 interface BottomSheetProps {
@@ -9,6 +11,9 @@ interface BottomSheetProps {
 }
 
 const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
+  const [firstInput, setFirstInput] = useState<String>('');
+  const [secondInput, setSecondInput] = useState<String>('');
+
   const sender = props.sender;
   const snapPoints = useMemo(() => ['40%'], []);
   const renderBackdrop = useCallback(
@@ -16,6 +21,30 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
     []
   );
   const { dismiss } = useBottomSheetModal();
+  const { setCustomers } = useCustomersStore();
+
+  async function handleConfirmButton() {
+    if (sender === 'footer') {
+      try {
+        await addItem(`${firstInput} ${secondInput}`);
+        console.log('added item successfully');
+      } catch (err) {
+        console.log('error while adding customer', err);
+      }
+    } else {
+      try {
+        await addCustomer(`${firstInput} ${secondInput}`);
+        const res = await getAllCustomer();
+        res.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        setCustomers(res);
+        console.log('added customer successfully');
+      } catch (err) {
+        console.log('error while adding customer', err);
+      }
+    }
+    dismiss();
+  }
+
   return (
     <BottomSheetModal
       handleIndicatorStyle={{}}
@@ -30,13 +59,13 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
         </View>
         <Text style={styles.text}>{sender == 'header' ? 'First name' : 'Item name'} </Text>
         <View style={styles.serachField}>
-          <TextInput style={styles.input} placeholder="type here.." />
+          <TextInput onChangeText={(text) => setFirstInput(text)} style={styles.input} placeholder="type here.." />
         </View>
         <Text style={styles.text}>{sender == 'header' ? 'Last name' : 'Item type'} </Text>
         <View style={styles.serachField}>
-          <TextInput style={styles.input} placeholder="type here.." />
+          <TextInput onChangeText={(text) => setSecondInput(text)} style={styles.input} placeholder="type here.." />
         </View>
-        <TouchableOpacity style={styles.ConfirmButtom} onPress={() => dismiss()}>
+        <TouchableOpacity style={styles.ConfirmButtom} onPress={() => handleConfirmButton()}>
           <Text style={styles.bottomText}>Confirm</Text>
         </TouchableOpacity>
       </View>
@@ -82,12 +111,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
   },
-  text:{
+  text: {
     fontSize: 12,
     marginHorizontal: 20,
     marginTop: 20,
-    fontWeight: "bold"
-  }
+    fontWeight: 'bold',
+  },
 });
 
 export default BottomSheet;

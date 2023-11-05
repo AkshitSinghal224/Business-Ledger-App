@@ -8,9 +8,9 @@ import { Link } from 'expo-router';
 
 const CustomFooter = () => {
   const BottomSheetRef = useRef<BottomSheetModal>(null);
+
   function openModal() {
     BottomSheetRef.current?.present();
-    console.log("open")
   }
   return (
     <View style={styles.container}>
@@ -18,11 +18,11 @@ const CustomFooter = () => {
       <TouchableOpacity onPress={openModal}>
         <Ionicons style={styles.cartIcon} name="cart" size={30} color={Colors.primary} />
       </TouchableOpacity>
-        <TouchableOpacity >
-      <Link href={'/Logs'}>
+      <TouchableOpacity>
+        <Link href={'/Logs'}>
           <Ionicons style={styles.bookIcon} name="book-outline" size={25} color={Colors.primary} />
-      </Link>
-        </TouchableOpacity>
+        </Link>
+      </TouchableOpacity>
     </View>
   );
 };
