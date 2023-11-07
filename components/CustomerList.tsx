@@ -25,8 +25,9 @@ const CustomerList = () => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Customers</Text>
-      {Customers.map((customer:any) => {
+      <Text style={styles.title}>Customers</Text>
+      {Customers.length === 0 && <Text style={styles.warning}>No customer found</Text>}
+      {Customers.map((customer: any) => {
         return (
           <Customer
             key={customer.id} // Add a unique key for each item in the list
@@ -56,7 +57,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 25,
+    marginTop: 40,
+    color: Colors.medium,
+    alignSelf: 'center',
   },
   customerItem: {
     backgroundColor: '#fff',
@@ -72,6 +75,13 @@ const styles = StyleSheet.create({
   },
   deleteIcon: {
     marginTop: 17,
+  },
+  warning: {
+    fontSize: 16,
+    color: Colors.primary,
+    marginTop: 20,
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
 });
 

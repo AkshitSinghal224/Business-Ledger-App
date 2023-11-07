@@ -48,11 +48,21 @@ const Item: React.FC<ItemProps> = ({ fetchItemsData, item }) => {
         <View style={styles.inputSection}>
           <Text style={styles.text}>Quantity:</Text>
           <View style={styles.serachField}>
-            <TextInput onChangeText={(text) => setFirstInput(text)} style={styles.input} placeholder="type here.." />
+            <TextInput
+              placeholderTextColor={Colors.medium}
+              onChangeText={(text) => setFirstInput(text)}
+              style={styles.input}
+              placeholder="in tons"
+            />
           </View>
           <Text style={styles.text}>Price:</Text>
           <View style={styles.serachField}>
-            <TextInput onChangeText={(text) => setSecondInput(text)} style={styles.input} placeholder="type here.." />
+            <TextInput
+              placeholderTextColor={Colors.medium}
+              onChangeText={(text) => setSecondInput(text)}
+              style={styles.input}
+              placeholder="in rupees"
+            />
           </View>
         </View>
       </View>
@@ -82,6 +92,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 16,
+    textTransform: 'capitalize',
   },
   bottomBorder: {
     marginTop: 8,
@@ -89,7 +100,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   text: {
-    marginTop: 8,
+    alignSelf: 'center',
   },
   serachField: {
     flex: 1,

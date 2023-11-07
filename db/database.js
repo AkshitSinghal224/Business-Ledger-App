@@ -151,13 +151,13 @@ export async function createLog(customer,log){
 
 }
 
-export async function getLogs(name) {
+export async function getLogs() {
   const db = SQLite.openDatabase('mydb.db');
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
         'SELECT * FROM logs',
-        [name],
+        [],
         (tx, result) => {
           const rows = result.rows._array;
           resolve(rows);

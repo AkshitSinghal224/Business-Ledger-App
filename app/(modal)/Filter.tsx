@@ -65,7 +65,7 @@ const Filter = () => {
             style={{ opacity: date ? 0.2 : 1 }}
             editable={!date}
             onChangeText={(text) => setName(text)}
-            placeholder="Enter name here"
+            placeholder="enter name here"
           />
         </View>
       </View>

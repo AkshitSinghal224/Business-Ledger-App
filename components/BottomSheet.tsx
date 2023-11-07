@@ -26,7 +26,7 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
   async function handleConfirmButton() {
     if (sender === 'footer') {
       try {
-        await addItem(`${firstInput} ${secondInput}`);
+        await addItem(`${firstInput} ( ${secondInput} )`);
        
       } catch (err) {
         console.error('error while adding customer', err);

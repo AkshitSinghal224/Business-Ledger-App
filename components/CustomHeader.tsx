@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop: 50,
   },
   titleContainer: {
     height: 55,
@@ -95,12 +96,13 @@ const styles = StyleSheet.create({
     color: Colors.primary,
   },
   searchContainer: {
-    height: 50,
+    height: 60,
     backgroundColor: '#fff',
     shadowColor: 'black',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 1,
+    elevation: 2,
   },
   serachSection: {
     flexDirection: 'row',

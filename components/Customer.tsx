@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   customersName: {
     fontSize: 25,
     marginBottom: 8,
+    textTransform: 'capitalize',
   },
   bottomBorder: {
     height: 1,

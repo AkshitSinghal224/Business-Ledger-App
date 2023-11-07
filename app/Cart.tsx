@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import useCustomersStore from '@/stores/khataStore';
 import { createLog, getAllItems } from '@/db/database';
 import Colors from '@/constants/Colors';
-import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 
 import Item from '@/components/Item';
@@ -12,7 +12,6 @@ import { useNavigation } from 'expo-router';
 const FilterSearchBar = () => {
   const { allItems, setAllItems } = useCustomersStore();
   const [searchQuery, setSearchQuery] = useState<string>('');
-
   const filterItems = async () => {
     if (!searchQuery) {
       const res = await getAllItems();
@@ -30,7 +29,7 @@ const FilterSearchBar = () => {
 
   return (
     <View style={styles.searchContainer}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      
         <View style={styles.serachSection}>
           <View style={styles.Field}>
             <Ionicons name="ios-search" size={20} color={Colors.medium} />
@@ -42,10 +41,13 @@ const FilterSearchBar = () => {
             />
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      
     </View>
   );
 };
+
+
+
 
 const Footer = () => {
   const {setSeletedTempItemsToNull, SeletedTempItems, SeletedCustomer } = useCustomersStore();
@@ -95,19 +97,23 @@ const Cart = () => {
   return (
     <>
       <FilterSearchBar />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.mainContiner}>
-            {allItems?.map((item: any, idx: any) => {
-              return <Item key={idx} fetchItemsData={fetchItemsData} item={item} />;
-            })}
-          </View>
-        </ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.page}>
+        <View style={styles.mainContiner}>
+          {allItems.length === 0 && <Text style={styles.warning}>No Item found</Text>}
+          {allItems?.map((item: any, idx: any) => {
+            return <Item key={idx} fetchItemsData={fetchItemsData} item={item} />;
+          })}
+        </View>
+      </ScrollView>
       <Footer />
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  page:{
+    backgroundColor:"#fff"
+  },
   headerMargin: {
     paddingTop: 20,
     backgroundColor: '#fff',
@@ -163,6 +169,13 @@ const styles = StyleSheet.create({
     height: 130,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  warning: {
+    fontSize: 16,
+    color: Colors.primary,
+    marginTop: 20,
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
 });
 

@@ -11,8 +11,8 @@ const Logs = () => {
   async function getAllLogs() {
     try {
       const data = await getLogs();
-      const allLogs = data.reverse();
-      setAllLogs(allLogs);
+      const resverseData = data.reverse();
+      setAllLogs(resverseData);
       console.log('get all logs successfully');
     } catch (error) {
       console.error('Error when get log data', error);
@@ -31,6 +31,7 @@ const Logs = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.page}>
       <View style={styles.mainContiner}>
+        {allLogs.length === 0 && <Text style={styles.warning}>No Logs found</Text>}
         {allLogs?.map((log: any) => {
           const parsedLogData = JSON.parse(log.data_log);
           console.log('main log data =>', parsedLogData);
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
   },
   name: {
     width: 150,
+    textTransform: 'capitalize',
   },
   quantity: {
     width: 70,
@@ -142,6 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     color: Colors.primary,
+    textTransform: 'capitalize',
   },
   priceRow: {
     flexDirection: 'row',
@@ -205,6 +208,13 @@ const styles = StyleSheet.create({
     height: 3,
     backgroundColor: Colors.medium,
     marginHorizontal: 40,
+  },
+  warning: {
+    fontSize: 16,
+    color: Colors.primary,
+    marginTop: 20,
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
 });
 
