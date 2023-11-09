@@ -49,15 +49,17 @@ const Item: React.FC<ItemProps> = ({ fetchItemsData, item }) => {
           <Text style={styles.text}>Quantity:</Text>
           <View style={styles.serachField}>
             <TextInput
+              inputMode="numeric"
               placeholderTextColor={Colors.medium}
               onChangeText={(text) => setFirstInput(text)}
               style={styles.input}
-              placeholder="in tons"
+              placeholder="in bags"
             />
           </View>
           <Text style={styles.text}>Price:</Text>
           <View style={styles.serachField}>
             <TextInput
+              inputMode="numeric"
               placeholderTextColor={Colors.medium}
               onChangeText={(text) => setSecondInput(text)}
               style={styles.input}

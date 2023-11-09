@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, Keyboard, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import useCustomersStore from '@/stores/khataStore';
 import { createLog, getAllItems } from '@/db/database';
@@ -55,13 +55,14 @@ const Footer = () => {
   const navigation = useNavigation();
 
   async function handleConfirmButton() {
-    try {
-      const res = await createLog(SeletedCustomer, SeletedTempItems);
-      setSeletedTempItemsToNull();
-      console.log('log sucess');
-    } catch (error) {
-      console.error('Error when loging data', error);
-    }
+    if (SeletedTempItems.length === 0) return;
+      try {
+        const res = await createLog(SeletedCustomer, SeletedTempItems);
+        setSeletedTempItemsToNull();
+        console.log('log sucess');
+      } catch (error) {
+        console.error('Error when loging data', error);
+      }
     navigation.navigate('index');
   }
 

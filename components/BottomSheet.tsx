@@ -25,7 +25,7 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
 
   async function handleConfirmButton() {
     if (!firstInput) return; 
-      if (sender === 'footer') {
+      if (sender === 'Cart') {
         try {
           await addItem(secondInput ? `${firstInput} ( ${secondInput} )` : `${firstInput}`);
         } catch (err) {
@@ -41,6 +41,9 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
           console.error('error while adding customer', err);
         }
       }
+      setFirstInput("");
+      setSecondInput("");
+
     dismiss();
   }
 
@@ -54,13 +57,13 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
     >
       <View style={styles.mainContainer}>
         <View style={styles.contentContainer}>
-          <Text style={styles.title}>{sender == 'header' ? 'Add Customer' : 'Add Item'}</Text>
+          <Text style={styles.title}>{sender == 'Person' ? 'Add Customer' : 'Add Item'}</Text>
         </View>
-        <Text style={styles.text}>{sender == 'header' ? 'First name' : 'Item name'} </Text>
+        <Text style={styles.text}>{sender == 'Person' ? 'First name' : 'Item name'} </Text>
         <View style={styles.serachField}>
           <TextInput onChangeText={(text) => setFirstInput(text)} style={styles.input} placeholder="type here.." />
         </View>
-        <Text style={styles.text}>{sender == 'header' ? 'Last name' : 'Item type'} </Text>
+        <Text style={styles.text}>{sender == 'Person' ? 'Last name' : 'Item type'} </Text>
         <View style={styles.serachField}>
           <TextInput onChangeText={(text) => setSecondInput(text)} style={styles.input} placeholder="type here.." />
         </View>

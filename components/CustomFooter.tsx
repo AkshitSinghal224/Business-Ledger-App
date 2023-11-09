@@ -1,27 +1,28 @@
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import BottomSheet from './BottomSheet';
 import { Link } from 'expo-router';
 
 const CustomFooter = () => {
   const BottomSheetRef = useRef<BottomSheetModal>(null);
-
-  function openModal() {
+  const [send,setSend] = useState<string>("");
+  function openModal(message: string) {
+    
+    setSend(message);
     BottomSheetRef.current?.present();
   }
+
   return (
     <View style={styles.container}>
-      <BottomSheet sender={'footer'} ref={BottomSheetRef} />
-      <TouchableOpacity onPress={openModal}>
-        <Ionicons style={styles.cartIcon} name="cart" size={30} color={Colors.primary} />
+      <BottomSheet sender={send} ref={BottomSheetRef} />
+      <TouchableOpacity onPress={() => openModal('Cart')}>
+        <Ionicons style={styles.cartIcon} name="cart-outline" size={30} color={Colors.primary} />
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Link href={'/Logs'}>
-          <Ionicons style={styles.bookIcon} name="book" size={30} color={Colors.primary} />
-        </Link>
+      <TouchableOpacity onPress={() => openModal('Person')}>
+        <Ionicons style={styles.bookIcon} name="person-add-outline" size={27} color={Colors.primary} />
       </TouchableOpacity>
     </View>
   );

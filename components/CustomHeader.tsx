@@ -8,13 +8,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect useState } from 'react';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import BottomSheet from './BottomSheet';
+
 import useCustomersStore from '@/stores/khataStore';
 import { getAllCustomer } from '@/db/database';
+import { Link } from 'expo-router';
 
 const SeachBar = () => {
   const { Customers, setCustomers } = useCustomersStore();
@@ -57,17 +57,14 @@ const SeachBar = () => {
 };
 
 const CustomHeader = () => {
-  const BottomSheetRef = useRef<BottomSheetModal>(null);
-  function openModal() {
-    BottomSheetRef.current?.present();
-  }
   return (
     <SafeAreaView style={styles.safeArea}>
-      <BottomSheet sender={'header'} ref={BottomSheetRef} />
       <View style={styles.titleContainer}>
         <Text style={styles.headerText}>Khata App</Text>
-        <TouchableOpacity onPress={openModal}>
-          <Ionicons style={styles.addButton} name="person-add-outline" size={20} color={Colors.primary} />
+        <TouchableOpacity>
+          <Link style={styles.book} href={'/Logs'}>
+            <Ionicons name="book" size={25} color={Colors.primary} />
+          </Link>
         </TouchableOpacity>
       </View>
       <SeachBar />
@@ -127,8 +124,8 @@ const styles = StyleSheet.create({
   serachIcon: {
     paddingLeft: 10,
   },
-  addButton: {
-    paddingRight: 13,
+  book: {
+    marginRight: 15,
   },
   backButton: {
     opacity: 100,

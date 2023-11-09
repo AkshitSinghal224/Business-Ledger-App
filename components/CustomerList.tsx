@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Colors from '@/constants/Colors';
 import { getAllCustomer } from '@/db/database';
 import useCustomersStore from '../stores/khataStore';
@@ -25,12 +25,14 @@ const CustomerList = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Customers</Text>
+      <Text style={styles.title} >
+        Customers
+      </Text>
       {Customers.length === 0 && <Text style={styles.warning}>No customer found</Text>}
       {Customers.map((customer: any) => {
         return (
           <Customer
-            key={customer.id} // Add a unique key for each item in the list
+            key={customer.id} 
             customer={customer}
             fetchCustomerData={fetchCustomerData}
           />

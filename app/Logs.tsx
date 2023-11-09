@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, StyleSheet, Keyboard, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
 import { deleteLog, getLogs } from '@/db/database';
 import Colors from '@/constants/Colors';
 import Swipeout from 'react-native-swipeout';
@@ -34,7 +34,6 @@ const Logs = () => {
         {allLogs.length === 0 && <Text style={styles.warning}>No Logs found</Text>}
         {allLogs?.map((log: any) => {
           const parsedLogData = JSON.parse(log.data_log);
-          console.log('main log data =>', parsedLogData);
           return (
             <Swipeout
               key={log.id}
@@ -67,7 +66,7 @@ const Logs = () => {
                       <>
                         <View key={idx} style={styles.logRow}>
                           <Text style={styles.name}>{row.name}</Text>
-                          <Text style={styles.quantity}>{`${row.quantity} ton`}</Text>
+                          <Text style={styles.quantity}>{`${row.quantity} bags`}</Text>
                           <Text style={styles.price}>{`₹${row.price}`}</Text>
                         </View>
                         <View style={styles.bottomBorder} />
