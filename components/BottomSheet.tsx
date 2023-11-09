@@ -24,23 +24,23 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
   const { setCustomers } = useCustomersStore();
 
   async function handleConfirmButton() {
-    if (sender === 'footer') {
-      try {
-        await addItem(`${firstInput} ( ${secondInput} )`);
-       
-      } catch (err) {
-        console.error('error while adding customer', err);
+    if (!firstInput) return; 
+      if (sender === 'footer') {
+        try {
+          await addItem(secondInput ? `${firstInput} ( ${secondInput} )` : `${firstInput}`);
+        } catch (err) {
+          console.error('error while adding customer', err);
+        }
+      } else {
+        try {
+          await addCustomer(`${firstInput} ${secondInput}`);
+          const res = await getAllCustomer();
+          res.sort((a: any, b: any) => a.name.localeCompare(b.name));
+          setCustomers(res);
+        } catch (err) {
+          console.error('error while adding customer', err);
+        }
       }
-    } else {
-      try {
-        await addCustomer(`${firstInput} ${secondInput}`);
-        const res = await getAllCustomer();
-        res.sort((a: any, b: any) => a.name.localeCompare(b.name));
-        setCustomers(res);
-      } catch (err) {
-        console.error('error while adding customer', err);
-      }
-    }
     dismiss();
   }
 
