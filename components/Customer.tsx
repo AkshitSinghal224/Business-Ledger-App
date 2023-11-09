@@ -45,6 +45,7 @@ const Customer: React.FC<CustomerProps> = ({ customer, fetchCustomerData }) => {
         <TouchableOpacity onPress={() => handleNameClick(customer)}>
           <View style={styles.customerItem}>
             <Text style={styles.customersName}>{customer?.name}</Text>
+            <Text style={styles.phone}>{`+91 ${customer?.phone}`}</Text>
             <View style={styles.bottomBorder} />
           </View>
         </TouchableOpacity>
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   },
   customersName: {
     fontSize: 25,
-    marginBottom: 8,
+
     textTransform: 'capitalize',
   },
   bottomBorder: {
@@ -87,6 +88,10 @@ const styles = StyleSheet.create({
   },
   deleteIcon: {
     marginTop: 17,
+  },
+  phone: {
+    color: Colors.medium,
+    marginBottom: 10,
   },
 });
 

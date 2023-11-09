@@ -5,10 +5,12 @@ import { getAllCustomer } from '@/db/database';
 import useCustomersStore from '../stores/khataStore';
 import Customer from './Customer';
 
+
 const CustomerList = () => {
   const { Customers, setCustomers } = useCustomersStore();
 
   async function fetchCustomerData() {
+    
     try {
       const res = await getAllCustomer();
       console.log(res);

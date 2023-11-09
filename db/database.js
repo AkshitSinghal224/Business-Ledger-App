@@ -4,7 +4,9 @@ import getCurrentDateAndTime from '../utils/dateAndTime';
 export default async function createTables() {
   const db = SQLite.openDatabase('mydb.db');
   await db.transaction(async (tx) => {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+    tx.executeSql(
+      'CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phone INTEGER)'
+    );
     tx.executeSql('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
     tx.executeSql(
       'CREATE TABLE IF NOT EXISTS logs (id INTEGER PRIMARY KEY AUTOINCREMENT,customer_id INTEGER, data_log TEXT, date TEXT, name TEXT)'
@@ -12,13 +14,13 @@ export default async function createTables() {
   });
 }
 
-export async function addCustomer(name) {
+export async function addCustomer(name, phone) {
   const db = SQLite.openDatabase('mydb.db');
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'INSERT INTO customers (name) VALUES (?)',
-        [name],
+        'INSERT INTO customers (name, phone) VALUES (?,?)',
+        [name,phone],
         (tx, result) => {
           resolve();
         },

@@ -1,13 +1,13 @@
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Clipboard, Switch } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import useCustomersStore from '@/stores/khataStore';
 import { createLog, getAllItems } from '@/db/database';
 import Colors from '@/constants/Colors';
 import { TextInput } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
-
 import Item from '@/components/Item';
 import { useNavigation } from 'expo-router';
+import { Linking } from 'react-native';
 
 const FilterSearchBar = () => {
   const { allItems, setAllItems } = useCustomersStore();
@@ -29,50 +29,77 @@ const FilterSearchBar = () => {
 
   return (
     <View style={styles.searchContainer}>
-      
-        <View style={styles.serachSection}>
-          <View style={styles.Field}>
-            <Ionicons name="ios-search" size={20} color={Colors.medium} />
-            <TextInput
-              value={searchQuery}
-              onChangeText={(text) => setSearchQuery(text)}
-              style={styles.searchInput}
-              placeholder="Search...."
-            />
-          </View>
+      <View style={styles.serachSection}>
+        <View style={styles.Field}>
+          <Ionicons name="ios-search" size={20} color={Colors.medium} />
+          <TextInput
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+            style={styles.searchInput}
+            placeholder="Search...."
+          />
         </View>
-      
+      </View>
     </View>
   );
 };
 
-
-
-
 const Footer = () => {
-  const {setSeletedTempItemsToNull, SeletedTempItems, SeletedCustomer } = useCustomersStore();
-
+  const { setSeletedTempItemsToNull, SeletedTempItems, SeletedCustomer } = useCustomersStore();
   const navigation = useNavigation();
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  function sendMessage(){
+    const items = SeletedTempItems;
+    let message = `Total items: ${items.length}\n`;
+    items.forEach((item: any, idx: any) => {
+      message += `item: ${idx+1}\nName: ${item.name}\nPrice: ${item.price}\nQuantity: ${item.quantity}\n\n`;
+    });
+    Clipboard.setString(message);
+    const phoneNumber = `+91 ${SeletedCustomer.phone}`;
+    const url = `sms:${phoneNumber}`;
+    Linking.openURL(url);
+  }
 
   async function handleConfirmButton() {
+    
+
     if (SeletedTempItems.length === 0) return;
-      try {
-        const res = await createLog(SeletedCustomer, SeletedTempItems);
-        setSeletedTempItemsToNull();
-        console.log('log sucess');
-      } catch (error) {
-        console.error('Error when loging data', error);
-      }
+    try {
+      await createLog(SeletedCustomer, SeletedTempItems);
+      setSeletedTempItemsToNull();
+      if(isEnabled) sendMessage();
+      
+    } catch (error) {
+      console.error('Error when loging data', error);
+    }
+    setIsEnabled(false);
     navigation.navigate('index');
   }
 
+  
+
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleConfirmButton}>
+      <View style={styles.buttonContainer}>
+        <Switch
+          trackColor={{ false: '#767577', true: Colors.medium }}
+          thumbColor={isEnabled ? Colors.primary : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+        <Text style={{ color: Colors.medium }}>send message to customer</Text>
+      </View>
         <View style={styles.ConfirmButtom}>
-          <Text style={styles.bottomText}>Confirm</Text>
+          <Text onPress={handleConfirmButton} style={styles.bottomText}>
+            Confirm
+          </Text>
         </View>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -112,8 +139,8 @@ const Cart = () => {
 };
 
 const styles = StyleSheet.create({
-  page:{
-    backgroundColor:"#fff"
+  page: {
+    backgroundColor: '#fff',
   },
   headerMargin: {
     paddingTop: 20,
@@ -156,7 +183,6 @@ const styles = StyleSheet.create({
   },
   ConfirmButtom: {
     padding: 16,
-    margin: 16,
     borderRadius: 4,
     backgroundColor: Colors.primary,
     alignItems: 'center',
@@ -167,9 +193,10 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: '#fff',
-    height: 130,
+    height: 150,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: -20,
   },
   warning: {
     fontSize: 16,
@@ -177,6 +204,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontWeight: 'bold',
     alignSelf: 'center',
+  },
+  buttonContainer:{
+    gap: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

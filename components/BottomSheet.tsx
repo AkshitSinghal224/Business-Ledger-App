@@ -13,6 +13,7 @@ interface BottomSheetProps {
 const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
   const [firstInput, setFirstInput] = useState<String>('');
   const [secondInput, setSecondInput] = useState<String>('');
+  const [thirdInput, setThirdInput] = useState<String>('');
 
   const sender = props.sender;
   const snapPoints = useMemo(() => ['80%'], []);
@@ -24,26 +25,25 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
   const { setCustomers } = useCustomersStore();
 
   async function handleConfirmButton() {
-    if (!firstInput) return; 
-      if (sender === 'Cart') {
-        try {
-          await addItem(secondInput ? `${firstInput} ( ${secondInput} )` : `${firstInput}`);
-        } catch (err) {
-          console.error('error while adding customer', err);
-        }
-      } else {
-        try {
-          await addCustomer(`${firstInput} ${secondInput}`);
-          const res = await getAllCustomer();
-          res.sort((a: any, b: any) => a.name.localeCompare(b.name));
-          setCustomers(res);
-        } catch (err) {
-          console.error('error while adding customer', err);
-        }
+    if (!firstInput) return;
+    if (sender === 'Cart') {
+      try {
+        await addItem(secondInput ? `${firstInput} ( ${secondInput} )` : `${firstInput}`);
+      } catch (err) {
+        console.error('error while adding customer', err);
       }
-      setFirstInput("");
-      setSecondInput("");
-
+    } else {
+      try {
+        await addCustomer(`${firstInput} ${secondInput}`, thirdInput);
+        const res = await getAllCustomer();
+        res.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        setCustomers(res);
+      } catch (err) {
+        console.error('error while adding customer', err);
+      }
+    }
+    setFirstInput('');
+    setSecondInput('');
     dismiss();
   }
 
@@ -67,6 +67,14 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
         <View style={styles.serachField}>
           <TextInput onChangeText={(text) => setSecondInput(text)} style={styles.input} placeholder="type here.." />
         </View>
+        {sender === 'Person' && (
+          <>
+            <Text style={styles.text}>{"Phone no"}</Text>
+            <View style={styles.serachField}>
+              <TextInput onChangeText={(text) => setThirdInput(text)} inputMode="numeric" style={styles.input} placeholder="add without +91" />
+            </View>
+          </>
+        )}
         <TouchableOpacity style={styles.ConfirmButtom} onPress={() => handleConfirmButton()}>
           <Text style={styles.bottomText}>Confirm</Text>
         </TouchableOpacity>
