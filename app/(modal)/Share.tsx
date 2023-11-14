@@ -1,16 +1,17 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Clipboard, Modal, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
-import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import { getLogs } from '@/db/database';
 import { useNavigation } from 'expo-router';
 
 const Share = () => {
   const [date, setDate] = useState<string>();
   const navigation = useNavigation();
+   const [isModalVisible, setModalVisible] = useState(false);
 
   async function handleConfirmButton() {
+    if(!date) return;
     if (date) {
       const allLogs = await getAllLogs();
       let data = allLogs.filter((item: any) => item.date.includes(date));
@@ -28,10 +29,10 @@ const Share = () => {
             Quantity: ${log.quantity}, 
             Price: ${log.price}\n`;
         });
-
         message += '\n';
       });
-      navigation.navigate('Logs');
+      Clipboard.setString(message);
+      setModalVisible(true);
     }
   }
 
@@ -44,6 +45,10 @@ const Share = () => {
     }
   }
 
+  const handleModalButton = async () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.filterOption}>
@@ -55,6 +60,16 @@ const Share = () => {
       <TouchableOpacity style={styles.ConfirmButtom} onPress={() => handleConfirmButton()}>
         <Text style={styles.bottomText}>Copy data</Text>
       </TouchableOpacity>
+      <Modal transparent={true} visible={isModalVisible} onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>{`${date} Date Logs Copied`}</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={handleModalButton}>
+              <Text style={styles.modalButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -92,6 +107,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: Colors.primary,
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 

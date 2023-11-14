@@ -5,7 +5,7 @@ export default async function createTables() {
   const db = SQLite.openDatabase('mydb.db');
   await db.transaction(async (tx) => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phone INTEGER)'
+      'CREATE TABLE IF NOT EXISTS payee (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phone TEXT)'
     );
     tx.executeSql('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
     tx.executeSql(
@@ -14,13 +14,27 @@ export default async function createTables() {
   });
 }
 
-export async function addCustomer(name, phone) {
+export async function resetAlldata() {
+  const db = SQLite.openDatabase('mydb.db');
+  await db.transaction(async (tx) => {
+    tx.executeSql('Drop TABLE payee');
+    tx.executeSql('Drop TABLE items');
+    tx.executeSql('Drop TABLE logs');
+      tx.executeSql('CREATE TABLE IF NOT EXISTS payee (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phone TEXT)');
+      tx.executeSql('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS logs (id INTEGER PRIMARY KEY AUTOINCREMENT,customer_id INTEGER, data_log TEXT, date TEXT, name TEXT)'
+      );
+  });
+}
+
+export async function addCustomer(name,number) {
   const db = SQLite.openDatabase('mydb.db');
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'INSERT INTO customers (name, phone) VALUES (?,?)',
-        [name,phone],
+        'INSERT INTO payee (name, phone) VALUES (?, ?)',
+        [name, number],
         (tx, result) => {
           resolve();
         },
@@ -56,7 +70,7 @@ export async function getAllCustomer() {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'SELECT * FROM customers',
+        'SELECT * FROM payee',
         [],
         (tx, result) => {
           const rows = result.rows._array;
@@ -94,7 +108,7 @@ export async function deleteCustomer(id) {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'DELETE FROM customers WHERE ID = ?',
+        'DELETE FROM payee WHERE ID = ?',
         [id],
         (tx, result) => {
           resolve(result);

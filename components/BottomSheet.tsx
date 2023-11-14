@@ -30,9 +30,10 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
       try {
         await addItem(secondInput ? `${firstInput} ( ${secondInput} )` : `${firstInput}`);
       } catch (err) {
-        console.error('error while adding customer', err);
+        console.error('error while adding item', err);
       }
     } else {
+      
       try {
         await addCustomer(`${firstInput} ${secondInput}`, thirdInput);
         const res = await getAllCustomer();
@@ -44,6 +45,7 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
     }
     setFirstInput('');
     setSecondInput('');
+    setThirdInput('');
     dismiss();
   }
 

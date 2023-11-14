@@ -64,7 +64,7 @@ const Logs = () => {
                   {parsedLogData.map((row: any, idx: any) => {
                     return (
                       <>
-                        <View key={idx} style={styles.logRow}>
+                        <View key={idx*Math.random()} style={styles.logRow}>
                           <Text style={styles.name}>{row.name}</Text>
                           <Text style={styles.quantity}>{`${row.quantity} bags`}</Text>
                           <Text style={styles.price}>{`₹${row.price}`}</Text>

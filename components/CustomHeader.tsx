@@ -7,13 +7,14 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  Modal,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 
 import useCustomersStore from '@/stores/khataStore';
-import { getAllCustomer } from '@/db/database';
+import { getAllCustomer, resetAlldata } from '@/db/database';
 import { Link } from 'expo-router';
 
 const SeachBar = () => {
@@ -57,18 +58,55 @@ const SeachBar = () => {
 };
 
 const CustomHeader = () => {
+  const [clickCount, setClickCount] = useState(0);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const {setCustomers } = useCustomersStore();
+
+  const handleButtonClick = () => {
+    const newClickCount = clickCount + 1;
+    setClickCount(newClickCount);
+
+    const threshold = 8;
+
+    if (newClickCount === threshold) {
+     
+      setModalVisible(true);
+
+      setClickCount(0);
+    }
+  };
+
+  const handleModalButton = async () => {
+    await resetAlldata();
+    setCustomers([]);
+    setModalVisible(false);
+  };
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.headerText}>Khata App</Text>
-        <TouchableOpacity>
-          <Link style={styles.book} href={'/Logs'}>
-            <Ionicons name="book" size={25} color={Colors.primary} />
-          </Link>
-        </TouchableOpacity>
-      </View>
-      <SeachBar />
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.titleContainer}>
+          <Text onPress={handleButtonClick} style={styles.headerText}>
+            Khata App
+          </Text>
+          <TouchableOpacity>
+            <Link style={styles.book} href={'/Logs'}>
+              <Ionicons name="book" size={25} color={Colors.primary} />
+            </Link>
+          </TouchableOpacity>
+        </View>
+        <SeachBar />
+      </SafeAreaView>
+      <Modal transparent={true} visible={isModalVisible} onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Are you sure?</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={handleModalButton}>
+              <Text style={styles.modalButtonText}>Reset all data</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -130,6 +168,32 @@ const styles = StyleSheet.create({
   backButton: {
     opacity: 100,
     paddingLeft: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: "red",
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 

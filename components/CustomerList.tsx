@@ -13,7 +13,6 @@ const CustomerList = () => {
     
     try {
       const res = await getAllCustomer();
-      console.log(res);
       res.sort((a:any, b:any) => a.name.localeCompare(b.name));
       setCustomers(res);
     } catch (error) {

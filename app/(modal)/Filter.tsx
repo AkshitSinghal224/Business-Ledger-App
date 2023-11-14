@@ -1,8 +1,7 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
-import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import useCustomersStore from '@/stores/khataStore';
 import { getLogs } from '@/db/database';
 import { useNavigation } from 'expo-router';
@@ -21,7 +20,7 @@ const Filter = () => {
        navigation.navigate('Logs');
 
     } else if (name) {
-      let filterd = allLogs.filter((item:any) => item.name.includes(name));
+      let filterd = allLogs.filter((item: any) => item.name.toLowerCase().includes(name.toLowerCase()));
       setAllLogs(filterd);
       navigation.navigate('Logs');
     }

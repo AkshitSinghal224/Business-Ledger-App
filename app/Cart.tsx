@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, Clipboard, Switch } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Clipboard, Switch, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import useCustomersStore from '@/stores/khataStore';
 import { createLog, getAllItems } from '@/db/database';
@@ -49,11 +49,11 @@ const Footer = () => {
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
 
-  function sendMessage(){
+  function sendMessage() {
     const items = SeletedTempItems;
-    let message = `Total items: ${items.length}\n`;
+    let message = `Total items: ${items.length}\n\n`;
     items.forEach((item: any, idx: any) => {
-      message += `item: ${idx+1}\nName: ${item.name}\nPrice: ${item.price}\nQuantity: ${item.quantity}\n\n`;
+      message += `item: ${idx + 1}\nName: ${item.name}\nPrice: ${item.price}\nQuantity: ${item.quantity}\n\n`;
     });
     Clipboard.setString(message);
     const phoneNumber = `+91 ${SeletedCustomer.phone}`;
@@ -62,22 +62,17 @@ const Footer = () => {
   }
 
   async function handleConfirmButton() {
-    
-
     if (SeletedTempItems.length === 0) return;
     try {
       await createLog(SeletedCustomer, SeletedTempItems);
       setSeletedTempItemsToNull();
-      if(isEnabled) sendMessage();
-      
+      if (isEnabled) sendMessage();
     } catch (error) {
       console.error('Error when loging data', error);
     }
     setIsEnabled(false);
     navigation.navigate('index');
   }
-
-  
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
@@ -93,13 +88,13 @@ const Footer = () => {
           onValueChange={toggleSwitch}
           value={isEnabled}
         />
-        <Text style={{ color: Colors.medium }}>send message to customer</Text>
+        <Text onPress={toggleSwitch} style={{ color: Colors.medium }}>
+          send message to customer
+        </Text>
       </View>
-        <View style={styles.ConfirmButtom}>
-          <Text onPress={handleConfirmButton} style={styles.bottomText}>
-            Confirm
-          </Text>
-        </View>
+      <TouchableOpacity onPress={handleConfirmButton} style={styles.ConfirmButtom}>
+        <Text style={styles.bottomText}>Confirm</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -205,7 +200,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
   },
-  buttonContainer:{
+  buttonContainer: {
     gap: 10,
     flexDirection: 'row',
     justifyContent: 'center',
