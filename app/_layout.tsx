@@ -63,6 +63,21 @@ export default function RootLayoutNav() {
           }}
         />
         <Stack.Screen
+          name="EditPage"
+          options={{
+            title: 'Edit Log',
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: '#fff',
+            },
+            headerTitleStyle: {
+              color: Colors.primary,
+              fontSize: 20,
+            },
+            headerTintColor: Colors.primary,
+          }}
+        />
+        <Stack.Screen
           name="Logs"
           options={{
             title: 'Log Book',

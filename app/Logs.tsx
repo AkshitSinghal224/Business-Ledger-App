@@ -1,27 +1,40 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { deleteLog, getLogs } from '@/db/database';
 import Colors from '@/constants/Colors';
 import Swipeout from 'react-native-swipeout';
 import { Ionicons } from '@expo/vector-icons';
 import useCustomersStore from '@/stores/khataStore';
+import { useNavigation } from 'expo-router';
+import Cart from './Cart';
 
 const Logs = () => {
-  const { allLogs, setAllLogs } = useCustomersStore();
+  const { allLogs, setAllLogs, setEditlogData, setPrevSeletedTempItems } = useCustomersStore();
   async function getAllLogs() {
     try {
       const data = await getLogs();
       const resverseData = data.reverse();
       setAllLogs(resverseData);
-      console.log('get all logs successfully');
     } catch (error) {
       console.error('Error when get log data', error);
     }
   }
 
   const handleDeletelog = (id: number) => {
-    deleteLog(id);
+
+    try{
+      deleteLog(id);
+    }catch(error) {
+      console.error(error)
+    }
     getAllLogs();
+  };
+  const navigation = useNavigation();
+
+  const handleEditlog = (logdata: any) => {
+    setPrevSeletedTempItems([]);
+    setEditlogData(logdata);
+    navigation.navigate('EditPage');
   };
 
   useEffect(() => {
@@ -49,6 +62,17 @@ const Logs = () => {
                   onPress: () => handleDeletelog(log.id),
                 },
               ]}
+              left={[
+                {
+                  component: (
+                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                      <Ionicons style={styles.editIcon} name="create-outline" size={25} color={'white'} />
+                    </View>
+                  ),
+                  backgroundColor: Colors.primary,
+                  onPress: () => handleEditlog(log),
+                },
+              ]}
             >
               <View style={styles.logContainer}>
                 <View style={styles.titleSection}>
@@ -64,7 +88,7 @@ const Logs = () => {
                   {parsedLogData.map((row: any, idx: any) => {
                     return (
                       <>
-                        <View key={idx*Math.random()} style={styles.logRow}>
+                        <View key={idx * Math.random()} style={styles.logRow}>
                           <Text style={styles.name}>{row.name}</Text>
                           <Text style={styles.quantity}>{`${row.quantity} bags`}</Text>
                           <Text style={styles.price}>{`₹${row.price}`}</Text>
@@ -86,6 +110,9 @@ const Logs = () => {
 
 const styles = StyleSheet.create({
   deleteIcon: {
+    marginTop: 100,
+  },
+  editIcon: {
     marginTop: 100,
   },
   name: {

@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, StyleSheet, Clipboard, Switch, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import useCustomersStore from '@/stores/khataStore';
-import { createLog, getAllItems } from '@/db/database';
+import { getAllItems, updateLog, getLogs } from '@/db/database';
 import Colors from '@/constants/Colors';
 import { TextInput } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -45,10 +45,10 @@ const FilterSearchBar = () => {
 };
 
 const Footer = () => {
-  const { setSeletedTempItemsToNull, SeletedTempItems, SeletedCustomer } = useCustomersStore();
+  const { setSeletedTempItemsToNull, setAllLogs, SeletedTempItems, editlogData, SeletedCustomer } = useCustomersStore();
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
-
+  console.log(SeletedTempItems);
   function sendMessage() {
     const items = SeletedTempItems;
     let message = `Total items: ${items.length}\n\n`;
@@ -60,18 +60,28 @@ const Footer = () => {
     const url = `sms:${phoneNumber}`;
     Linking.openURL(url);
   }
-
   async function handleConfirmButton() {
     if (SeletedTempItems.length === 0) return;
+
     try {
-      await createLog(SeletedCustomer, SeletedTempItems);
+      await updateLog(SeletedTempItems, editlogData.id);
       setSeletedTempItemsToNull();
       if (isEnabled) sendMessage();
     } catch (error) {
-      console.error('Error when loging data', error);
+      console.error('Error when updating log data', error);
     }
     setIsEnabled(false);
-    navigation.navigate('index');
+    await getAllLogs();
+    navigation.navigate('Logs');
+  }
+  async function getAllLogs() {
+    try {
+      const data = await getLogs();
+      const resverseData = data.reverse();
+      setAllLogs(resverseData);
+    } catch (error) {
+      console.error('Error when get log data', error);
+    }
   }
 
   const toggleSwitch = () => {
@@ -99,9 +109,9 @@ const Footer = () => {
   );
 };
 
-const Cart = () => {
-  
-  const { allItems, setAllItems } = useCustomersStore();
+const EditPage = () => {
+  const { allItems, setAllItems, editlogData, setPrevSeletedTempItems, setSeletedTempItems, SeletedTempItems } =
+    useCustomersStore();
 
   async function fetchItemsData() {
     try {
@@ -112,9 +122,13 @@ const Cart = () => {
       console.error('Error fetching items data:', error);
     }
   }
+  
+  const parsedLogData = JSON.parse(editlogData.data_log);
 
   useEffect(() => {
     fetchItemsData();
+    const parsedLogData = JSON.parse(editlogData.data_log);
+    setPrevSeletedTempItems(parsedLogData);
   }, []);
 
   return (
@@ -124,7 +138,8 @@ const Cart = () => {
         <View style={styles.mainContiner}>
           {allItems.length === 0 && <Text style={styles.warning}>No Item found</Text>}
           {allItems?.map((item: any, idx: any) => {
-            return <Item key={idx} fetchItemsData={fetchItemsData} item={item} />;
+            const check = parsedLogData.find((data: any) => data.id === item.id);
+            return <Item key={idx} fetchItemsData={fetchItemsData} item={item} data={check ? check : undefined} />;
           })}
         </View>
       </ScrollView>
@@ -208,4 +223,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Cart;
+export default EditPage;

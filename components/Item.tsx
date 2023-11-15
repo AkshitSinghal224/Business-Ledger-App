@@ -9,12 +9,14 @@ import useCustomersStore from '@/stores/khataStore';
 interface ItemProps {
   fetchItemsData: () => void;
   item: any;
+  data?: any;
 }
 
-const Item: React.FC<ItemProps> = ({ fetchItemsData, item }) => {
+const Item: React.FC<ItemProps> = ({ fetchItemsData, item, data }) => {
   const [firstInput, setFirstInput] = useState<String>('');
   const [secondInput, setSecondInput] = useState<String>('');
-  const { setSeletedTempItems } = useCustomersStore();
+  const { setSeletedTempItems, setPrevSeletedTempItems, SeletedTempItems } = useCustomersStore();
+
 
   const handleDeleteItem = async (id: number) => {
     await deleteItem(id);
@@ -24,6 +26,10 @@ const Item: React.FC<ItemProps> = ({ fetchItemsData, item }) => {
   useEffect(() => {
     if (firstInput && secondInput) {
       setSeletedTempItems({ ...item, quantity: firstInput, price: secondInput });
+    }
+
+    if(firstInput === "" || secondInput === ""){
+      setPrevSeletedTempItems(SeletedTempItems.filter((obj: any) => obj.id !== item.id))
     }
   }, [firstInput, secondInput]);
 
@@ -54,6 +60,7 @@ const Item: React.FC<ItemProps> = ({ fetchItemsData, item }) => {
               onChangeText={(text) => setFirstInput(text)}
               style={styles.input}
               placeholder="in bags"
+              defaultValue={data ? data?.quantity : ""}
             />
           </View>
           <Text style={styles.text}>Price:</Text>
@@ -64,6 +71,7 @@ const Item: React.FC<ItemProps> = ({ fetchItemsData, item }) => {
               onChangeText={(text) => setSecondInput(text)}
               style={styles.input}
               placeholder="in rupees"
+              defaultValue={data ? data?.price: ""}
             />
           </View>
         </View>

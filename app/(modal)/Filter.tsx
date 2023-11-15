@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
 import useCustomersStore from '@/stores/khataStore';
@@ -15,10 +15,9 @@ const Filter = () => {
 
   function handleConfirmButton() {
     if (date) {
-      let filterd = allLogs.filter((item:any) => item.date.includes(date));
+      let filterd = allLogs.filter((item: any) => item.date.includes(date));
       setAllLogs(filterd);
-       navigation.navigate('Logs');
-
+      navigation.navigate('Logs');
     } else if (name) {
       let filterd = allLogs.filter((item: any) => item.name.toLowerCase().includes(name.toLowerCase()));
       setAllLogs(filterd);
@@ -31,7 +30,6 @@ const Filter = () => {
       const data = await getLogs();
       const allLogs = data.reverse();
       setAllLogs(allLogs);
-      console.log('get all logs successfully');
     } catch (error) {
       console.error('Error when get log data', error);
     }
@@ -43,14 +41,53 @@ const Filter = () => {
     getAllLogs();
   }
 
+  useEffect(() => {
+    getAllLogs();
+  },[]);
+
+function filterByToday() {
+  const today = new Date();
+  const formattedDate = formatDate(today);
+  let filtered = allLogs.filter((item: any) => item.date.includes(formattedDate));
+  setAllLogs(filtered);
+  navigation.navigate('Logs');
+}
+
+function filterByYesterday() {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const formattedDate = formatDate(yesterday);
+  let filtered = allLogs.filter((item: any) => item.date.includes(formattedDate));
+  setAllLogs(filtered);
+  navigation.navigate('Logs');
+}
+
+function formatDate(date: Date): string {
+  const dd = String(date.getDate()).padStart(2, '0');
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const yyyy = date.getFullYear();
+  return `${dd}-${mm}-${yyyy}`;
+}
+
   return (
     <View style={styles.mainContainer}>
+      <View style={styles.filterButton}>
+        <View style={styles.buttonWrapper}>
+          <Text onPress={filterByToday} style={styles.text}>
+            Today
+          </Text>
+        </View>
+        <View style={styles.buttonWrapper}>
+          <Text onPress={filterByYesterday} style={styles.text}>
+            Yesterday
+          </Text>
+        </View>
+      </View>
       <View style={styles.filterOption}>
         <Text style={styles.text}>Filter by Date</Text>
         <View style={styles.searchWrapper}>
           <TextInput
-            style={{ opacity: name ? 0.2 : 1,
-              }}
+            style={{ opacity: name ? 0.2 : 1 }}
             editable={!name}
             onChangeText={(text) => setDate(text)}
             placeholder="dd-mm-yyyy"
@@ -116,6 +153,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  filterButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  buttonWrapper: {
+    padding: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: Colors.primary,
   },
 });
 

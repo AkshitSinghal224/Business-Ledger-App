@@ -157,7 +157,6 @@ export async function createLog(customer,log){
         customername
       ],
       (tx, result) => {
-        console.log('Log entry inserted successfully');
       },
       (error) => {
         console.error('Error inserting log entry:', error);
@@ -165,6 +164,23 @@ export async function createLog(customer,log){
     );
   });
 
+}
+
+export async function updateLog(log, id) {
+  const db = SQLite.openDatabase('mydb.db');
+  const serializedLogEntries = JSON.stringify(log);
+
+  db.transaction((tx) => {
+    tx.executeSql(
+      'UPDATE logs SET data_log = ? WHERE id = ?',
+      [serializedLogEntries, id],
+      (tx, result) => {
+      },
+      (error) => {
+        console.error('Error inserting log entry:', error);
+      }
+    );
+  });
 }
 
 export async function getLogs() {
@@ -203,6 +219,8 @@ export async function deleteLog(id) {
     });
   });
 }
+
+
 
 
 

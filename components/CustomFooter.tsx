@@ -18,11 +18,11 @@ const CustomFooter = () => {
   return (
     <View style={styles.container}>
       <BottomSheet sender={send} ref={BottomSheetRef} />
-      <TouchableOpacity onPress={() => openModal('Cart')}>
-        <Ionicons style={styles.cartIcon} name="cart-outline" size={30} color={Colors.primary} />
-      </TouchableOpacity>
       <TouchableOpacity onPress={() => openModal('Person')}>
         <Ionicons style={styles.bookIcon} name="person-add-outline" size={27} color={Colors.primary} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => openModal('Cart')}>
+        <Ionicons style={styles.cartIcon} name="cart-outline" size={30} color={Colors.primary} />
       </TouchableOpacity>
     </View>
   );
