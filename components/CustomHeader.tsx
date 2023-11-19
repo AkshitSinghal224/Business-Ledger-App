@@ -14,11 +14,11 @@ import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 
 import useCustomersStore from '@/stores/khataStore';
-import { getAllCustomer, resetAlldata } from '@/db/database';
+import {  resetAlldata } from '@/db/database';
 import { Link } from 'expo-router';
 
 const SeachBar = () => {
-  const { Customers, setCustomers, filteredCustomers, setfilteredCustomers } = useCustomersStore();
+  const { Customers, setFilteredCustomers } = useCustomersStore();
 
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -28,14 +28,13 @@ const SeachBar = () => {
 
   const filterCustomers = async () => {
     if (!searchQuery) {
-      const res = await getAllCustomer();
-      res.sort((a: any, b: any) => a.name.localeCompare(b.name));
-      setCustomers(res);
+      setFilteredCustomers(null);
     } else {
-      const filteredCustomers = Customers.filter((customer: any) =>
+      const filtered = Customers.filter((customer: any) =>
       customer.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setCustomers(filteredCustomers);
+   
+      setFilteredCustomers(filtered);
     }
   };
 
@@ -91,7 +90,7 @@ const CustomHeader = () => {
           </Text>
           <TouchableOpacity>
             <Link style={styles.book} href={'/Logs'}>
-              <Ionicons name="book" size={25} color={Colors.primary} />
+              <Ionicons name="book-outline" size={25} color={Colors.primary} />
             </Link>
           </TouchableOpacity>
         </View>
@@ -101,9 +100,14 @@ const CustomHeader = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>Are you sure?</Text>
+            <View style={{gap: 10}}>
             <TouchableOpacity style={styles.modalButton} onPress={handleModalButton}>
               <Text style={styles.modalButtonText}>Reset all data</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButtonClose} onPress={handleModalButton}>
+              <Text style={styles.modalButtonText}>Close</Text>
+            </TouchableOpacity>
+             </View>
           </View>
         </View>
       </Modal>
@@ -188,13 +192,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: "red",
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonClose: {
+    backgroundColor: Colors.medium,
     padding: 10,
     borderRadius: 5,
   },
   modalButtonText: {
     color: '#fff',
     fontSize: 16,
+    textAlign: 'center',
   },
 });
 

@@ -10,16 +10,15 @@ import { useNavigation } from 'expo-router';
 import { Linking } from 'react-native';
 
 const FilterSearchBar = () => {
-  const { allItems, setAllItems } = useCustomersStore();
+  const { allItems, setFilteredItems } = useCustomersStore();
   const [searchQuery, setSearchQuery] = useState<string>('');
+
   const filterItems = async () => {
     if (!searchQuery) {
-      const res = await getAllItems();
-      res.sort((a: any, b: any) => a.name.localeCompare(b.name));
-      setAllItems(res);
+      setFilteredItems(allItems);
     } else {
-      const filteredItems = allItems.filter((item: any) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
-      setAllItems(filteredItems);
+      const filtered = allItems.filter((item: any) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      setFilteredItems(filtered);
     }
   };
 
@@ -99,8 +98,8 @@ const Footer = () => {
 };
 
 const Cart = () => {
-  
-  const { allItems, setAllItems } = useCustomersStore();
+  const { allItems, setAllItems, filteredItems } = useCustomersStore();
+
 
   async function fetchItemsData() {
     try {
@@ -122,9 +121,13 @@ const Cart = () => {
       <ScrollView showsVerticalScrollIndicator={false} style={styles.page}>
         <View style={styles.mainContiner}>
           {allItems.length === 0 && <Text style={styles.warning}>No Item found</Text>}
-          {allItems?.map((item: any, idx: any) => {
-            return <Item key={idx} fetchItemsData={fetchItemsData} item={item} />;
-          })}
+          {filteredItems
+            ? filteredItems?.map((item: any, idx: any) => {
+                return <Item key={idx} fetchItemsData={fetchItemsData} item={item} />;
+              })
+            : allItems?.map((item: any, idx: any) => {
+                return <Item key={idx} fetchItemsData={fetchItemsData} item={item} />;
+              })}
         </View>
       </ScrollView>
       <Footer />

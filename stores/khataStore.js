@@ -5,10 +5,13 @@ const useCustomersStore = create((set) => ({
   setCustomers: (newCustomers) => set({ Customers: newCustomers }),
 
   filteredCustomers: null,
-  setFilteredCustomers: (newCustomers) => set({ FilteredCustomers: newCustomers }),
+  setFilteredCustomers: (newCustomers) => set({ filteredCustomers: newCustomers }),
 
   allItems: [],
   setAllItems: (newItems) => set({ allItems: newItems }),
+
+  filteredItems: null,
+  setFilteredItems: (newItems) => set({ filteredItems: newItems }),
 
   SeletedTempItems: [],
   setPrevSeletedTempItems: (newItems) => set({ SeletedTempItems: newItems }),
