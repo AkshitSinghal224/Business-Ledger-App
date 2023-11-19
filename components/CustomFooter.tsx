@@ -4,7 +4,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import React, { useRef, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import BottomSheet from './BottomSheet';
-import { Link } from 'expo-router';
+
 
 const CustomFooter = () => {
   const BottomSheetRef = useRef<BottomSheetModal>(null);
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     padding: 16,
-    height: 100,
+    height: 80,
     shadowColor: 'black',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,

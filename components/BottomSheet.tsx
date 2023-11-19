@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-nativ
 import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { BottomSheetBackdrop, BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import Colors from '@/constants/Colors';
-import { addCustomer, addItem, getAllCustomer } from '@/db/database';
+import { addCustomer, addItem, getAllCustomer, getAllItems } from '@/db/database';
 import useCustomersStore from '@/stores/khataStore';
 
 export type Ref = BottomSheetModal;
@@ -24,11 +24,24 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
   const { dismiss } = useBottomSheetModal();
   const { setCustomers } = useCustomersStore();
 
+  const { setAllItems } = useCustomersStore();
+
+  async function fetchItemsData() {
+    try {
+      const res = await getAllItems();
+      res.sort((a: any, b: any) => a.name.localeCompare(b.name));
+      setAllItems(res);
+    } catch (error) {
+      console.error('Error fetching items data:', error);
+    }
+  }
+
   async function handleConfirmButton() {
     if (!firstInput) return;
     if (sender === 'Cart') {
       try {
         await addItem(secondInput ? `${firstInput} ( ${secondInput} )` : `${firstInput}`);
+        fetchItemsData();
       } catch (err) {
         console.error('error while adding item', err);
       }

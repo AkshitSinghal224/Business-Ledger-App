@@ -7,7 +7,7 @@ import Customer from './Customer';
 
 
 const CustomerList = () => {
-  const { Customers, setCustomers } = useCustomersStore();
+  const { Customers, setCustomers, filteredCustomers } = useCustomersStore();
 
   async function fetchCustomerData() {
     
@@ -26,19 +26,15 @@ const CustomerList = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title} >
-        Customers
-      </Text>
+      <Text style={styles.title}>Customers</Text>
       {Customers.length === 0 && <Text style={styles.warning}>No customer found</Text>}
-      {Customers.map((customer: any) => {
-        return (
-          <Customer
-            key={customer.id} 
-            customer={customer}
-            fetchCustomerData={fetchCustomerData}
-          />
-        );
-      })}
+      {filteredCustomers
+        ? filteredCustomers.map((customer: any) => {
+            return <Customer key={customer.id} customer={customer} fetchCustomerData={fetchCustomerData} />;
+          })
+        : Customers.map((customer: any) => {
+            return <Customer key={customer.id} customer={customer} fetchCustomerData={fetchCustomerData} />;
+          })}
     </View>
   );
 };

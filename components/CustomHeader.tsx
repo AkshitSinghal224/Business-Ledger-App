@@ -18,9 +18,10 @@ import { getAllCustomer, resetAlldata } from '@/db/database';
 import { Link } from 'expo-router';
 
 const SeachBar = () => {
-  const { Customers, setCustomers } = useCustomersStore();
+  const { Customers, setCustomers, filteredCustomers, setfilteredCustomers } = useCustomersStore();
 
   const [searchQuery, setSearchQuery] = useState<string>('');
+
   useEffect(() => {
     filterCustomers();
   }, [searchQuery]);
@@ -32,7 +33,7 @@ const SeachBar = () => {
       setCustomers(res);
     } else {
       const filteredCustomers = Customers.filter((customer: any) =>
-        customer.name.toLowerCase().includes(searchQuery.toLowerCase())
+      customer.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setCustomers(filteredCustomers);
     }

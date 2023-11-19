@@ -4,12 +4,15 @@ const useCustomersStore = create((set) => ({
   Customers: [],
   setCustomers: (newCustomers) => set({ Customers: newCustomers }),
 
+  filteredCustomers: null,
+  setFilteredCustomers: (newCustomers) => set({ FilteredCustomers: newCustomers }),
+
   allItems: [],
   setAllItems: (newItems) => set({ allItems: newItems }),
 
   SeletedTempItems: [],
   setPrevSeletedTempItems: (newItems) => set({ SeletedTempItems: newItems }),
-  
+
   setSeletedTempItems: (newItem) => {
     set((state) => {
       const existingItemIndex = state.SeletedTempItems.findIndex((item) => item.id === newItem.id);

@@ -72,16 +72,12 @@ function formatDate(date: Date): string {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.filterButton}>
-        <View style={styles.buttonWrapper}>
-          <Text onPress={filterByToday} style={styles.text}>
-            Today
-          </Text>
-        </View>
-        <View style={styles.buttonWrapper}>
-          <Text onPress={filterByYesterday} style={styles.text}>
-            Yesterday
-          </Text>
-        </View>
+        <TouchableOpacity onPress={filterByToday} style={styles.buttonWrapper}>
+          <Text style={styles.text}>Today</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={filterByYesterday} style={styles.buttonWrapper}>
+          <Text style={styles.text}>Yesterday</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.filterOption}>
         <Text style={styles.text}>Filter by Date</Text>

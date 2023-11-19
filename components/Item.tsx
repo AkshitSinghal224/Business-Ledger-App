@@ -13,7 +13,7 @@ interface ItemProps {
 }
 
 const Item: React.FC<ItemProps> = ({ fetchItemsData, item, data }) => {
-  const [firstInput, setFirstInput] = useState<String>('');
+  const [firstInput, setFirstInput] = useState<String>(data ? data?.quantity : '');
   const [secondInput, setSecondInput] = useState<String>('');
   const { setSeletedTempItems, setPrevSeletedTempItems, SeletedTempItems } = useCustomersStore();
 
@@ -22,13 +22,13 @@ const Item: React.FC<ItemProps> = ({ fetchItemsData, item, data }) => {
     await deleteItem(id);
     fetchItemsData();
   };
-
+  
   useEffect(() => {
-    if (firstInput && secondInput) {
-      setSeletedTempItems({ ...item, quantity: firstInput, price: secondInput });
+    if (firstInput) {
+      setSeletedTempItems({ ...item, quantity: firstInput, price: secondInput ? secondInput : '---' });
     }
 
-    if(firstInput === "" || secondInput === ""){
+    if(firstInput === ""){
       setPrevSeletedTempItems(SeletedTempItems.filter((obj: any) => obj.id !== item.id))
     }
   }, [firstInput, secondInput]);

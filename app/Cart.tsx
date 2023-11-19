@@ -48,7 +48,6 @@ const Footer = () => {
   const { setSeletedTempItemsToNull, SeletedTempItems, SeletedCustomer } = useCustomersStore();
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
-
   function sendMessage() {
     const items = SeletedTempItems;
     let message = `Total items: ${items.length}\n\n`;

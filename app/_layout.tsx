@@ -1,11 +1,12 @@
 import { Link, Stack } from 'expo-router';
 import CustomHeader from '../components/CustomHeader';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { useEffect } from 'react';
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { useEffect, useRef, useState } from 'react';
 import createTables from '../db/database';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity, View } from 'react-native';
+import BottomSheet from '@/components/BottomSheet';
 
 export const unstable_settings = {
   initialRouteName: 'index',
@@ -15,6 +16,12 @@ export default function RootLayoutNav() {
   useEffect(() => {
     createTables();
   }, []);
+  const BottomSheetRef = useRef<BottomSheetModal>(null);
+  const [send, setSend] = useState<string>('');
+  function openModal(message: string) {
+    setSend(message);
+    BottomSheetRef.current?.present();
+  }
 
   return (
     <BottomSheetModalProvider>
@@ -59,6 +66,18 @@ export default function RootLayoutNav() {
               color: Colors.primary,
               fontSize: 20,
             },
+            headerRight: () => (
+              <>
+              <BottomSheet sender={send} ref={BottomSheetRef} />
+              <TouchableOpacity style={{ alignItems: "center", justifyContent: "center", marginRight: 10}} onPress={() => openModal('Cart')}>
+                <Ionicons
+                  name="cart-outline"
+                  size={25}
+                  color={Colors.primary}
+                />
+              </TouchableOpacity>
+              </>
+            ),
             headerTintColor: Colors.primary,
           }}
         />
