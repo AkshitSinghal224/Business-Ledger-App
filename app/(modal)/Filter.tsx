@@ -74,13 +74,13 @@ function formatDate(date: Date): string {
     <View style={styles.mainContainer}>
       <View style={styles.filterButton}>
         <TouchableOpacity onPress={handleResetButton} style={styles.buttonWrapper}>
-          <Text style={styles.text}>All Logs</Text>
+          <Text style={styles.textbtn}>All Logs</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={filterByToday} style={styles.buttonWrapper}>
-          <Text style={styles.text}>Today Logs</Text>
+          <Text style={styles.textbtn}>Today Logs</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={filterByYesterday} style={styles.buttonWrapper}>
-          <Text style={styles.text}>Yesterday Logs</Text>
+          <Text style={styles.textbtn}>Yesterday Logs</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.filterOption}>
@@ -128,6 +128,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
+    fontWeight: 'bold',
+  },
+  textbtn: {
+    fontSize: 10,
     fontWeight: 'bold',
   },
   searchWrapper: {
