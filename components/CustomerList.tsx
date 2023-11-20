@@ -54,7 +54,7 @@ const CustomerList = () => {
                 <Ionicons style={{ marginLeft: 5 }} name="book-outline" size={20} color={Colors.primary} />
               </View>
               <View style={{ flexDirection: 'row' }}>
-                <Text>4. click on any customer to create log</Text>
+                <Text>4. Click on any customer to create log</Text>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Text>5. You can delete any customer or item by swiping left</Text>

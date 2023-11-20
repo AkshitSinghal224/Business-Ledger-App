@@ -15,7 +15,7 @@ const FilterSearchBar = () => {
 
   const filterItems = async () => {
     if (!searchQuery) {
-      setFilteredItems(allItems);
+      setFilteredItems(null);
     } else {
       const filtered = allItems.filter((item: any) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
       setFilteredItems(filtered);

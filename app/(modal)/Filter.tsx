@@ -39,6 +39,7 @@ const Filter = () => {
     setDate('');
     setName('');
     getAllLogs();
+    navigation.navigate('Logs');
   }
 
   useEffect(() => {
@@ -72,11 +73,14 @@ function formatDate(date: Date): string {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.filterButton}>
+        <TouchableOpacity onPress={handleResetButton} style={styles.buttonWrapper}>
+          <Text style={styles.text}>All Logs</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={filterByToday} style={styles.buttonWrapper}>
-          <Text style={styles.text}>Today</Text>
+          <Text style={styles.text}>Today Logs</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={filterByYesterday} style={styles.buttonWrapper}>
-          <Text style={styles.text}>Yesterday</Text>
+          <Text style={styles.text}>Yesterday Logs</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.filterOption}>

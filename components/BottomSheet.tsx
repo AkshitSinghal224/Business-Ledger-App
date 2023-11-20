@@ -21,27 +21,18 @@ const BottomSheet = forwardRef<Ref, BottomSheetProps>((props, ref) => {
     (props: any) => <BottomSheetBackdrop appearsOnIndex={1} disappearsOnIndex={-1} {...props} />,
     []
   );
+
   const { dismiss } = useBottomSheetModal();
-  const { setCustomers } = useCustomersStore();
-
-  const { setAllItems } = useCustomersStore();
-
-  async function fetchItemsData() {
-    try {
-      const res = await getAllItems();
-      res.sort((a: any, b: any) => a.name.localeCompare(b.name));
-      setAllItems(res);
-    } catch (error) {
-      console.error('Error fetching items data:', error);
-    }
-  }
+  const { setCustomers, setAllItems } = useCustomersStore();
 
   async function handleConfirmButton() {
     if (!firstInput) return;
     if (sender === 'Cart') {
       try {
         await addItem(secondInput ? `${firstInput} ( ${secondInput} )` : `${firstInput}`);
-        fetchItemsData();
+        const res = await getAllItems();
+        res.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        setAllItems([...res]);
       } catch (err) {
         console.error('error while adding item', err);
       }
