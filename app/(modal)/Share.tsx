@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, Clipboard, Modal, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
-import Colors from '@/constants/Colors';
+
 import { getLogs } from '@/db/database';
 import { useNavigation } from 'expo-router';
+import Colors from '@/constants/Colors';
 
 const Share = () => {
   const [date, setDate] = useState<string>();

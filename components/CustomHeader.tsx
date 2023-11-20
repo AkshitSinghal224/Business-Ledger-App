@@ -85,9 +85,12 @@ const CustomHeader = () => {
     <>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.titleContainer}>
-          <Text onPress={handleButtonClick} style={styles.headerText}>
-            Khata App
-          </Text>
+          <View>
+            <Text onPress={handleButtonClick} style={styles.headerText}>
+              Business Logs
+            </Text>
+            <Text style={styles.headerTextLower}>v.1.5.0</Text>
+          </View>
           <TouchableOpacity>
             <Link style={styles.book} href={'/Logs'}>
               <Ionicons name="book-outline" size={25} color={Colors.primary} />
@@ -100,14 +103,14 @@ const CustomHeader = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>Are you sure?</Text>
-            <View style={{gap: 10}}>
-            <TouchableOpacity style={styles.modalButton} onPress={handleModalButton}>
-              <Text style={styles.modalButtonText}>Reset all data</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButtonClose} onPress={handleModalButton}>
-              <Text style={styles.modalButtonText}>Close</Text>
-            </TouchableOpacity>
-             </View>
+            <View style={{ gap: 10 }}>
+              <TouchableOpacity style={styles.modalButton} onPress={handleModalButton}>
+                <Text style={styles.modalButtonText}>Reset all data</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalButtonClose} onPress={() => setModalVisible(false)}>
+                <Text style={styles.modalButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   titleContainer: {
-    height: 55,
+    height: 60,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -131,18 +134,21 @@ const styles = StyleSheet.create({
   },
   headerText: {
     marginLeft: 8,
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: Colors.primary,
+  },
+  headerTextLower: {
+    marginLeft: 8,
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: Colors.primary,
+    marginBottom: 5,
   },
   searchContainer: {
     height: 60,
     backgroundColor: '#fff',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-    elevation: 2,
+
   },
   serachSection: {
     flexDirection: 'row',
