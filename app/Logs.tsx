@@ -58,7 +58,7 @@ const Logs = () => {
                       <Ionicons style={styles.deleteIcon} name="trash-outline" size={23} color={'white'} />
                     </View>
                   ),
-                  backgroundColor: Colors.medium,
+                  backgroundColor: Colors.secondary,
                   onPress: () => handleDeletelog(log.id),
                 },
               ]}

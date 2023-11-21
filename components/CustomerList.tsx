@@ -93,10 +93,10 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   title: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'bold',
     marginTop: 40,
-    color: Colors.medium,
+    color: Colors.secondary,
     alignSelf: 'center',
   },
   customerItem: {

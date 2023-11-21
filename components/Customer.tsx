@@ -36,7 +36,7 @@ const Customer: React.FC<CustomerProps> = ({ customer, fetchCustomerData }) => {
               <Ionicons style={styles.deleteIcon} name="trash-outline" size={23} color={'white'} />
             </View>
           ),
-          backgroundColor: Colors.medium,
+          backgroundColor: Colors.secondary,
           onPress: () => handleDeleteCustomer(customer.id),
         },
       ]}
@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
   },
   customerItem: {
     backgroundColor: '#fff',
-    marginTop: 20,
+    marginTop: 15,
   },
   customersName: {
-    fontSize: 25,
+    fontSize: 20,
 
     textTransform: 'capitalize',
   },
